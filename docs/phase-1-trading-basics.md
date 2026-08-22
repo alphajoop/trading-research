@@ -1,159 +1,110 @@
 # Phase 1 — Trading & Market Basics
 
-## Status
-
-**Completed.**
-
 ## Objective
 
-Build the minimum market knowledge required to reason about systematic trading research without assuming that a strategy will be profitable.
+Establish the minimum trading and market knowledge required to make informed research and implementation decisions without assuming that a strategy will be profitable.
 
-## Concepts covered
+## Research question
 
-### 1. Market structure
+What concepts and constraints are necessary to evaluate a systematic trading idea responsibly before implementing or evaluating a strategy?
 
-A market is a place or system where participants buy and sell an asset. An order book lists available buy and sell orders at different price levels.
+This phase does not attempt to answer whether a profitable strategy exists. It establishes the vocabulary, mechanics, risk concepts, and research discipline needed for later phases.
 
-Key terms:
+## What we learned
 
-- **Bid:** highest price currently offered by buyers.
-- **Ask:** lowest price currently offered by sellers.
-- **Spread:** difference between the best Ask and best Bid.
+### Market structure
 
-Example:
+- order book;
+- bid and ask;
+- spread;
+- market and limit orders;
+- liquidity and execution basics.
 
-```text
-SELL / ASK
-100 700 FCFA → 3 units
-101 000 FCFA → 2 units
+### Price and positions
 
-------------------
+- candlesticks and basic price representation;
+- long and short positions;
+- position sizing and maximum exposure;
+- profit and loss (P&L).
 
-BUY / BID
-100 500 FCFA → 2 units
-100 000 FCFA → 4 units
-```
+### Trading costs and risk
 
-```text
-Best Ask = 100 700 FCFA
-Best Bid = 100 500 FCFA
-Spread   = 200 FCFA
-```
+- fees;
+- spread and slippage;
+- win rate;
+- average win and average loss;
+- expectancy;
+- loss limits;
+- maximum drawdown.
 
-The order book changes as participants add, cancel, or execute orders.
+### Research and backtesting
 
-### 2. Orders
+- chronological historical simulation;
+- train, validation, and test separation;
+- out-of-sample evaluation;
+- overfitting;
+- data leakage;
+- multiple testing;
+- robustness and reproducibility.
 
-A **Market Order** prioritizes immediate execution at the best available prices. The final execution price can differ from the first visible price when available liquidity is insufficient for the requested size.
+## Research principles established
 
-A **Limit Order** specifies the maximum price acceptable for a buy or the minimum price acceptable for a sell. It can remain unfilled if the market does not reach the specified price.
+A historical simulation must respect the information available at the time of each decision. Future information must not influence past decisions.
 
-These mechanics make liquidity, spread, and slippage important considerations for later research.
+The final test set must remain independent from the decisions used to develop the strategy. Repeatedly modifying a strategy based on test results turns the test into another optimization target.
 
-### 3. Price representation
+A strong historical result is not sufficient evidence of future profitability. Performance must be considered together with risk, costs, execution assumptions, sample size, and out-of-sample behavior.
 
-Candlesticks provide a compact representation of price movement over a time interval, commonly using open, high, low, and close values.
+Simple and explainable hypotheses should be preferred before adding unnecessary complexity.
 
-The exact time interval matters. Historical observations must be interpreted in chronological order when simulating decisions.
+## What we are not doing
 
-### 4. Long and short
+- We are not building a guaranteed-profit bot.
+- We are not targeting a fixed daily income as a design requirement.
+- We are not deploying real capital during the initial research phases.
+- We are not assuming that a strong backtest predicts future returns.
+- We are not using machine learning before establishing a simple baseline.
+- We are not defining a trading strategy in this phase.
 
-A **long** position benefits from an increase in the asset price, while a **short** position benefits from a decrease, subject to the mechanics and risks of the instrument and venue.
+## Evaluation philosophy
 
-For this project, shorting is treated as a concept to understand, not as an instruction to trade it with real money.
+Future experiments should be evaluated using appropriate measures such as:
 
-### 5. Position sizing
+- total return;
+- volatility;
+- maximum drawdown;
+- win rate;
+- average win and average loss;
+- expectancy;
+- profit factor;
+- number of trades;
+- exposure and turnover;
+- fees, spread, and slippage;
+- performance across different market regimes;
+- out-of-sample performance;
+- robustness to reasonable parameter changes.
 
-Position sizing determines how much capital or exposure is assigned to a position.
+No single metric, including raw profit, is sufficient on its own.
 
-A simple research constraint can specify:
+## Development workflow
 
-```text
-Maximum risk per trade
-Maximum risk per unit
-Maximum position size
-```
+Each phase follows the same loop:
 
-Position size must be considered together with the distance to the defined loss level and the available capital.
+1. Define the question.
+2. Learn the required concepts.
+3. Implement the smallest useful experiment.
+4. Test it.
+5. Record the result.
+6. Review assumptions and limitations.
+7. Commit the work.
+8. Only then move to the next phase.
 
-### 6. P&L, fees, and expectancy
+## Security
 
-A trade's gross result is not necessarily its net result. A simplified model is:
+Secrets must never be committed. API credentials, private keys, exchange credentials, and local environment files remain outside version control.
 
-```text
-Gross P&L
-- fees
-- spread / execution costs
-- slippage where applicable
-= Net P&L
-```
+## Exit criteria
 
-Expectancy can be expressed as the average expected result per trade under a defined model. For example:
+Phase 1 is complete when the project has established the trading and market vocabulary, basic risk concepts, backtesting principles, and research rules required for the next implementation phase.
 
-```text
-Expectancy = (win probability × average win)
-           - (loss probability × average loss)
-```
-
-Historical expectancy is a research measurement, not a guarantee of future performance.
-
-### 7. Risk and drawdown
-
-Returns must be evaluated together with risk. Important measures include loss limits, exposure, and maximum drawdown.
-
-A strategy with a high return can still be unsuitable if it requires excessive drawdown or risk.
-
-### 8. Backtesting
-
-A backtest applies fixed, explicit rules to historical data in chronological order to study how those rules would have behaved.
-
-A valid simulation must avoid using information that was unavailable at the time of each historical decision.
-
-Backtesting does not predict the future and does not prove profitability.
-
-### 9. Train, validation, and test
-
-Historical data can be separated chronologically into development and evaluation periods:
-
-```text
-TRAIN       → develop the research idea
-VALIDATION  → evaluate and refine choices
-TEST        → final out-of-sample evaluation
-```
-
-The final test must remain independent from the decisions used to develop the strategy. If test results are repeatedly used to modify the strategy, the test is no longer an independent evaluation.
-
-### 10. Overfitting and data leakage
-
-**Overfitting** occurs when a strategy becomes too adapted to the historical data used during development and fails to generalize to unseen data.
-
-**Data leakage** occurs when information that should not have been available at the time of development or decision-making influences the strategy or evaluation.
-
-A key rule for historical simulation is:
-
-> At time T, a decision may use only information available at or before T.
-
-### 11. Multiple testing and robustness
-
-Trying many strategy variants and selecting the best historical result increases the risk of finding a result that looks strong by chance.
-
-Complexity and repeated optimization therefore require caution. A promising result should be evaluated on data that were not used to select the final strategy.
-
-## Research rules established by Phase 1
-
-1. No real-money trading during the research phases.
-2. No promise or assumption of profitability.
-3. Prefer simple and explainable hypotheses.
-4. Do not use future information in historical decisions.
-5. Keep final evaluation data independent from development.
-6. Include realistic trading costs and execution assumptions where applicable.
-7. Measure both performance and risk.
-8. Make experiments reproducible.
-9. Document assumptions and important decisions.
-10. Treat backtest results as research evidence, not as a guarantee of future returns.
-
-## Phase boundary
-
-Phase 1 establishes vocabulary, basic mechanics, risk concepts, and research discipline. It does not define a trading strategy or claim that a profitable strategy has been found.
-
-The next phase will establish the **NautilusTrader research environment** and its technical foundations before any strategy is evaluated.
+The next phase will establish the NautilusTrader research environment and its technical foundations before any strategy is evaluated.
