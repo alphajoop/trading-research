@@ -2,7 +2,7 @@
 
 Research and experimentation in algorithmic trading, quantitative strategies, backtesting, and risk management.
 
-> **Status:** Phase 0 — Foundation
+> **Status:** Phase 1 — Trading & Market Basics completed
 
 ## Purpose
 
@@ -25,7 +25,7 @@ The project starts with no real-money trading. Strategies must be researched, te
 ## Research Roadmap
 
 - [x] Phase 0 — Foundation and research scope
-- [ ] Phase 1 — Trading and market basics
+- [x] Phase 1 — Trading and market basics
 - [ ] Phase 2 — NautilusTrader environment
 - [ ] Phase 3 — First baseline strategy
 - [ ] Phase 4 — Backtesting
@@ -36,6 +36,24 @@ The project starts with no real-money trading. Strategies must be researched, te
 - [ ] Phase 9 — Strategy research and improvements
 - [ ] Phase 10 — Machine learning experiments
 - [ ] Phase 11 — Live trading evaluation
+
+## Phase 1 Scope
+
+Phase 1 established the minimum concepts required to reason about systematic trading research:
+
+- market structure, order books, bid, ask, and spread;
+- market and limit orders;
+- candlesticks and basic price representation;
+- long and short positions;
+- position sizing and maximum exposure;
+- P&L, fees, win rate, and expectancy;
+- risk, loss limits, and drawdown;
+- backtesting and chronological simulation;
+- train, validation, and test separation;
+- overfitting, data leakage, and multiple testing;
+- robustness and reproducibility principles.
+
+The phase intentionally does not establish a profitable strategy or imply that future returns are predictable.
 
 ## Disclaimer
 
